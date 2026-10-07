@@ -28,6 +28,7 @@ const elements = {
   location: document.querySelector("#profile-location"),
   projectList: document.querySelector("#project-list"),
   projectStatus: document.querySelector("#project-status"),
+  languageChips: document.querySelector("#language-chips"),
   joined: document.querySelector("#profile-joined"),
   statFollowers: document.querySelector("#stat-followers"),
   statRepos: document.querySelector("#stat-repos"),
@@ -152,6 +153,15 @@ function setProjects(repositories) {
 
   const totalStars = repositories.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
   elements.statStars.textContent = formatNumber(totalStars);
+  const languages = new Map();
+  repositories.forEach((repo) => {
+    if (repo.language) languages.set(repo.language, (languages.get(repo.language) || 0) + 1);
+  });
+  const topLanguages = [...languages.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, 5)
+    .map(([language]) => createTextElement("span", "language-chip", language));
+  elements.languageChips.replaceChildren(...topLanguages);
   elements.projectList.replaceChildren(...publicRepos.map(createProjectCard));
   elements.projectStatus.textContent = publicRepos.length
     ? `Showing ${publicRepos.length} of ${repositories.length} public repositories`

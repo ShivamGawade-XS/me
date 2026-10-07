@@ -43,40 +43,73 @@
 
     <main class="portfolio">
       <section class="hero section-anchor" id="home" aria-labelledby="hero-title">
-        <div class="hero-orbit" aria-hidden="true"></div>
+        <div class="hero-scene" aria-hidden="true">
+          <div class="scene-sky"></div>
+          <svg class="scene-art" viewBox="0 0 1050 760" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="scene-fade" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#1c715f" stop-opacity=".06" />
+                <stop offset=".6" stop-color="#d7b7a3" stop-opacity=".18" />
+                <stop offset="1" stop-color="#f5eee6" stop-opacity=".42" />
+              </linearGradient>
+              <linearGradient id="scene-ground" x1="0" y1="0" x2="0" y2="1">
+                <stop stop-color="#9dafa8" stop-opacity=".1" />
+                <stop offset="1" stop-color="#788d86" stop-opacity=".4" />
+              </linearGradient>
+              <filter id="scene-blur">
+                <feGaussianBlur stdDeviation="9" />
+              </filter>
+            </defs>
+            <path class="scene-hill scene-hill-back" d="M0 480 Q170 395 360 458T700 438T1050 414V760H0Z" />
+            <path class="scene-hill scene-hill-front" d="M0 525 Q160 455 330 504T690 480T1050 475V760H0Z" />
+            <g class="scene-rings">
+              <ellipse cx="630" cy="445" rx="250" ry="344" />
+              <ellipse cx="630" cy="445" rx="198" ry="286" />
+              <ellipse cx="630" cy="445" rx="144" ry="224" />
+              <path d="M385 327C468 203 634 205 738 300S847 442 809 537" />
+            </g>
+            <g class="scene-person">
+              <ellipse cx="760" cy="667" rx="61" ry="13" fill="#394942" opacity=".13" filter="url(#scene-blur)" />
+              <circle cx="754" cy="478" r="17" fill="#5c5c53" />
+              <path d="M738 497Q753 488 771 500L785 577 769 607 781 666 760 670 742 607 730 663 710 660 724 575 715 537Q715 510 738 497Z" fill="#68766d" />
+              <path d="M768 507Q792 527 792 569L775 579 758 539Z" fill="#89928a" opacity=".78" />
+            </g>
+            <rect width="1050" height="760" fill="url(#scene-fade)" />
+          </svg>
+          <div class="scene-grain"></div>
+        </div>
+        <div class="hero-copy-block">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> GITHUB PORTFOLIO <span class="eyebrow-divider">·</span> <span id="hero-handle">@ShivamGawade-XS</span></p>
+          <h1 id="hero-title"><span id="hero-name">Shivam Gawade</span></h1>
+          <p class="hero-copy" id="hero-bio">Tech enthusiast 💻🔥</p>
+          <div class="hero-actions">
+            <a class="button button-primary" id="hero-github" href="https://github.com/ShivamGawade-XS" target="_blank" rel="noreferrer">
+              <span class="github-mark" aria-hidden="true">◉</span> GitHub
+            </a>
+          </div>
+
+          <div class="stats-panel" aria-label="GitHub profile statistics">
+            <div class="stat">
+              <span class="stat-value" id="stat-repos">—</span>
+              <span class="stat-label">Repos</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" id="stat-stars">—</span>
+              <span class="stat-label">Stars</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" id="stat-followers">—</span>
+              <span class="stat-label">Followers</span>
+            </div>
+          </div>
+          <div id="language-chips" class="language-chips" aria-label="Top programming languages"></div>
+        </div>
         <div class="avatar-frame">
           <img id="avatar" src="" alt="" />
           <span id="avatar-fallback" class="avatar-fallback" aria-hidden="true">SG</span>
           <span class="availability-dot" title="Open to new ideas"></span>
         </div>
-        <p class="eyebrow"><span class="eyebrow-dot"></span> GITHUB PORTFOLIO <span class="eyebrow-divider">/</span> <span id="hero-handle">@ShivamGawade-XS</span></p>
-        <h1 id="hero-title">Hey, I'm <span id="hero-name">Shivam Gawade</span><span class="title-period">.</span></h1>
-        <p class="hero-copy" id="hero-bio">A tech enthusiast building thoughtful things with code.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#projects">
-            Explore my work <span aria-hidden="true">↘</span>
-          </a>
-          <a class="button button-quiet" id="hero-github" href="https://github.com/ShivamGawade-XS" target="_blank" rel="noreferrer">
-            <span class="github-mark" aria-hidden="true">◉</span> GitHub profile
-          </a>
-        </div>
-
-        <div class="stats-panel" aria-label="GitHub profile statistics">
-          <div class="stat">
-            <span class="stat-value" id="stat-repos">—</span>
-            <span class="stat-label">Public repos</span>
-          </div>
-          <span class="stat-rule" aria-hidden="true"></span>
-          <div class="stat">
-            <span class="stat-value" id="stat-stars">—</span>
-            <span class="stat-label">Stars earned</span>
-          </div>
-          <span class="stat-rule" aria-hidden="true"></span>
-          <div class="stat">
-            <span class="stat-value" id="stat-followers">—</span>
-            <span class="stat-label">Followers</span>
-          </div>
-        </div>
+        <div class="hero-credit">Original design by Sameera Wijerathna <span aria-hidden="true">↗</span></div>
         <a class="scroll-cue" href="#projects"><span aria-hidden="true">↓</span> SCROLL TO EXPLORE</a>
       </section>
 
