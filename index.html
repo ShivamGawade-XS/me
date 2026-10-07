@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A personal portfolio powered by GitHub — projects, profile, and ways to connect."
+    />
+    <meta name="theme-color" content="#f4f6f3" />
+    <title>Shivam Gawade — Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="page-glow page-glow-one" aria-hidden="true"></div>
+    <div class="page-glow page-glow-two" aria-hidden="true"></div>
+
+    <nav class="side-nav" aria-label="Main navigation">
+      <a class="nav-mark" href="#home" aria-label="Back to home">s<span>.</span></a>
+      <div class="nav-links">
+        <a class="nav-link is-active" href="#home" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">⌂</span><span>Home</span>
+        </a>
+        <a class="nav-link" href="#projects">
+          <span class="nav-icon nav-project-icon" aria-hidden="true">▤</span><span>Projects</span>
+        </a>
+        <a class="nav-link" href="#about">
+          <span class="nav-icon" aria-hidden="true">◎</span><span>About</span>
+        </a>
+        <a class="nav-link" href="#contact">
+          <span class="nav-icon nav-contact-icon" aria-hidden="true">↗</span><span>Contact</span>
+        </a>
+      </div>
+      <span class="nav-caption">PORTFOLIO&nbsp; · &nbsp;2026</span>
+    </nav>
+
+    <main class="portfolio">
+      <section class="hero section-anchor" id="home" aria-labelledby="hero-title">
+        <div class="hero-orbit" aria-hidden="true"></div>
+        <div class="avatar-frame">
+          <img id="avatar" src="" alt="" />
+          <span id="avatar-fallback" class="avatar-fallback" aria-hidden="true">SG</span>
+          <span class="availability-dot" title="Open to new ideas"></span>
+        </div>
+        <p class="eyebrow"><span class="eyebrow-dot"></span> GITHUB PORTFOLIO <span class="eyebrow-divider">/</span> <span id="hero-handle">@ShivamGawade-XS</span></p>
+        <h1 id="hero-title">Hey, I'm <span id="hero-name">Shivam Gawade</span><span class="title-period">.</span></h1>
+        <p class="hero-copy" id="hero-bio">A tech enthusiast building thoughtful things with code.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#projects">
+            Explore my work <span aria-hidden="true">↘</span>
+          </a>
+          <a class="button button-quiet" id="hero-github" href="https://github.com/ShivamGawade-XS" target="_blank" rel="noreferrer">
+            <span class="github-mark" aria-hidden="true">◉</span> GitHub profile
+          </a>
+        </div>
+
+        <div class="stats-panel" aria-label="GitHub profile statistics">
+          <div class="stat">
+            <span class="stat-value" id="stat-repos">—</span>
+            <span class="stat-label">Public repos</span>
+          </div>
+          <span class="stat-rule" aria-hidden="true"></span>
+          <div class="stat">
+            <span class="stat-value" id="stat-stars">—</span>
+            <span class="stat-label">Stars earned</span>
+          </div>
+          <span class="stat-rule" aria-hidden="true"></span>
+          <div class="stat">
+            <span class="stat-value" id="stat-followers">—</span>
+            <span class="stat-label">Followers</span>
+          </div>
+        </div>
+        <a class="scroll-cue" href="#projects"><span aria-hidden="true">↓</span> SCROLL TO EXPLORE</a>
+      </section>
+
+      <section class="content-section section-anchor" id="projects" aria-labelledby="projects-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">01 <span>— SELECTED WORK</span></p>
+            <h2 id="projects-title">Things I've been<br />building<span class="title-period">.</span></h2>
+          </div>
+          <a id="all-projects-link" class="text-link" href="https://github.com/ShivamGawade-XS?tab=repositories" target="_blank" rel="noreferrer">
+            All repositories <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <p class="section-intro">A selection of recent experiments, ideas, and open-source work pulled straight from GitHub.</p>
+        <div id="project-status" class="project-status" role="status" aria-live="polite">Loading projects from GitHub…</div>
+        <div id="project-list" class="project-list" aria-label="Selected GitHub projects"></div>
+        <a id="projects-more" class="button button-outline projects-more" href="https://github.com/ShivamGawade-XS?tab=repositories" target="_blank" rel="noreferrer">
+          More on GitHub <span aria-hidden="true">↗</span>
+        </a>
+      </section>
+
+      <section class="content-section about-section section-anchor" id="about" aria-labelledby="about-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">02 <span>— A LITTLE ABOUT ME</span></p>
+            <h2 id="about-title">Curious mind.<br />Builder's heart<span class="title-period">.</span></h2>
+          </div>
+          <span class="about-stamp" aria-hidden="true">✳</span>
+        </div>
+        <div class="about-card">
+          <div class="about-mark" aria-hidden="true">“</div>
+          <div class="about-copy">
+            <p id="about-bio">I’m a tech enthusiast who loves exploring ideas and turning them into useful things. My GitHub is where those ideas take shape.</p>
+            <div class="about-details">
+              <span id="profile-location" class="detail-pill">⌖ &nbsp;North Goa, India</span>
+              <span id="profile-joined" class="detail-pill">✳ &nbsp;On GitHub since 2025</span>
+            </div>
+          </div>
+          <a class="about-link" id="about-github" href="https://github.com/ShivamGawade-XS" target="_blank" rel="noreferrer" aria-label="View GitHub profile">↗</a>
+        </div>
+      </section>
+
+      <section class="contact-section section-anchor" id="contact" aria-labelledby="contact-title">
+        <p class="section-kicker">03 <span>— WHAT'S NEXT?</span></p>
+        <h2 id="contact-title">Have an idea?<br />Let's make it real<span class="title-period">.</span></h2>
+        <p class="contact-copy">Good things happen when curious people build together. Find me on GitHub and let's get something started.</p>
+        <a class="button button-primary contact-button" id="contact-link" href="https://github.com/ShivamGawade-XS" target="_blank" rel="noreferrer">
+          Say hello <span aria-hidden="true">↗</span>
+        </a>
+      </section>
+
+      <footer class="site-footer">
+        <a class="footer-brand" href="#home">s<span>.</span></a>
+        <p>Made with curiosity <span aria-hidden="true">✳</span> and a little bit of code.</p>
+        <a id="footer-github" href="https://github.com/ShivamGawade-XS" target="_blank" rel="noreferrer">@ShivamGawade-XS ↗</a>
+      </footer>
+    </main>
+  </body>
+</html>
