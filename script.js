@@ -28,9 +28,11 @@ const elements = {
   heroHandle: document.querySelector("#hero-handle"),
   heroName: document.querySelector("#hero-name"),
   profileStatus: document.querySelector("#profile-status"),
+  profileRetry: document.querySelector("#profile-retry"),
   location: document.querySelector("#profile-location"),
   projectList: document.querySelector("#project-list"),
   projectStatus: document.querySelector("#project-status"),
+  projectsRetry: document.querySelector("#projects-retry"),
   languageChips: document.querySelector("#language-chips"),
   joined: document.querySelector("#profile-joined"),
   statFollowers: document.querySelector("#stat-followers"),
@@ -79,6 +81,8 @@ function setProfile(profile) {
   const name = getDisplayName(profile);
   const initials = name.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
   elements.heroName.textContent = name;
+  elements.heroName.parentElement.classList.toggle("is-long-name", name.length > 16);
+  document.title = `${name} — Developer`;
   elements.heroBio.textContent = profile.bio || "A tech enthusiast building thoughtful things with code.";
   elements.aboutBio.textContent = profile.bio || `${name} is a curious builder exploring ideas and turning them into useful things.`;
   elements.statRepos.textContent = formatNumber(profile.public_repos || 0);
@@ -164,7 +168,7 @@ function getShowcaseRepositories(repositories) {
 function setProjects(repositories, profile) {
   const showcaseRepositories = getShowcaseRepositories(repositories);
   const displayedRepositories = showcaseRepositories.slice(0, projectLimit);
-  const totalStars = repositories.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
+  const totalStars = showcaseRepositories.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
   elements.statStars.textContent = formatNumber(totalStars);
 
   const languages = new Map();
@@ -181,7 +185,9 @@ function setProjects(repositories, profile) {
     });
   elements.languageChips.replaceChildren(...topLanguages);
   elements.projectList.replaceChildren(...displayedRepositories.map(createProjectCard));
+  elements.projectList.setAttribute("aria-busy", "false");
   elements.projectStatus.classList.remove("is-error");
+  elements.projectsRetry.hidden = true;
   elements.projectStatus.textContent = displayedRepositories.length
     ? `Showing ${displayedRepositories.length} of ${showcaseRepositories.length} active, non-fork repositories`
     : "No active, non-fork repositories to show yet.";
@@ -192,11 +198,29 @@ function setProjects(repositories, profile) {
 }
 
 function getCache(key) {
+  let cachedValue;
   try {
-    const cached = JSON.parse(sessionStorage.getItem(key));
+    cachedValue = sessionStorage.getItem(key);
+  } catch (error) {
+    console.warn(`Unable to read GitHub cache for ${username}.`, error);
+    return null;
+  }
+  if (!cachedValue) return null;
+
+  try {
+    const cached = JSON.parse(cachedValue);
     if (cached && Date.now() - cached.savedAt < cacheLifetime) return cached.data;
   } catch (error) {
-    if (error instanceof SyntaxError) sessionStorage.removeItem(key);
+    if (!(error instanceof SyntaxError)) {
+      console.warn(`Unable to parse GitHub cache for ${username}.`, error);
+      return null;
+    }
+  }
+
+  try {
+    sessionStorage.removeItem(key);
+  } catch (error) {
+    console.warn(`Unable to clear invalid GitHub cache for ${username}.`, error);
   }
   return null;
 }
@@ -209,7 +233,7 @@ function setCache(key, data) {
   }
 }
 
-async function fetchJson(path) {
+async function fetchJson(path, includeHeaders = false) {
   const controller = new AbortController();
   const timeout = window.setTimeout(() => controller.abort(), 12000);
   try {
@@ -227,7 +251,14 @@ async function fetchJson(path) {
       throw new Error(detail);
     }
 
-    return await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (error) {
+      if (error instanceof SyntaxError) throw new Error("GitHub returned an unreadable response. Please try again.");
+      throw error;
+    }
+    return includeHeaders ? { data, headers: response.headers } : data;
   } catch (error) {
     if (error.name === "AbortError") throw new Error("GitHub took too long to respond. Please try again shortly.");
     if (error instanceof TypeError) throw new Error("Unable to reach GitHub. Check your connection and try again.");
@@ -237,10 +268,28 @@ async function fetchJson(path) {
   }
 }
 
+async function fetchRepositories(login) {
+  const repositories = [];
+  let page = 1;
+  let hasNextPage = true;
+
+  while (hasNextPage) {
+    const path = `/users/${encodeURIComponent(login)}/repos?per_page=100&page=${page}&sort=updated`;
+    const { data: pageRepositories, headers } = await fetchJson(path, true);
+    if (!Array.isArray(pageRepositories)) throw new Error("GitHub returned an invalid repository list.");
+    repositories.push(...pageRepositories);
+    hasNextPage = /<[^>]+>\s*;\s*rel="next"/.test(headers.get("Link") || "");
+    page += 1;
+  }
+
+  return repositories;
+}
+
 function showProfileError(error, hasCachedProfile) {
   const prefix = hasCachedProfile ? "Live profile refresh failed. Showing saved profile data. " : "";
   elements.profileStatus.textContent = `${prefix}${error.message}`;
   elements.profileStatus.classList.add("is-error");
+  elements.profileRetry.hidden = false;
 }
 
 function showProjectError(error, hasCachedRepositories) {
@@ -248,13 +297,24 @@ function showProjectError(error, hasCachedRepositories) {
   elements.projectStatus.textContent = hasCachedRepositories
     ? `Live project refresh failed. Showing saved projects. ${error.message}`
     : `Projects could not be loaded. ${error.message}`;
+  elements.projectList.setAttribute("aria-busy", "false");
+  elements.projectsRetry.hidden = false;
 }
 
 async function loadPortfolio() {
+  elements.profileRetry.hidden = true;
+  elements.projectsRetry.hidden = true;
+  elements.profileStatus.textContent = "";
+  elements.profileStatus.classList.remove("is-error");
+  elements.projectStatus.classList.remove("is-error");
+  elements.projectList.setAttribute("aria-busy", "true");
   setProfileLinks(username);
   if (!/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/.test(username)) {
-    showProfileError(new Error("The username in the URL is not a valid GitHub username."), false);
-    showProjectError(new Error("Please check the username and try again."), false);
+    elements.profileStatus.textContent = "The username in the URL is not a valid GitHub username.";
+    elements.profileStatus.classList.add("is-error");
+    elements.projectStatus.classList.add("is-error");
+    elements.projectStatus.textContent = "Please check the username in the URL.";
+    elements.projectList.setAttribute("aria-busy", "false");
     return;
   }
 
@@ -271,10 +331,11 @@ async function loadPortfolio() {
 
   const [profileResult, repositoriesResult] = await Promise.allSettled([
     fetchJson(`/users/${encodeURIComponent(username)}`),
-    fetchJson(`/users/${encodeURIComponent(username)}/repos?per_page=100&sort=updated`),
+    fetchRepositories(username),
   ]);
 
-  if (profileResult.status === "fulfilled" && profileResult.value.login) {
+  const profileLoaded = profileResult.status === "fulfilled" && Boolean(profileResult.value.login);
+  if (profileLoaded) {
     const profile = profileResult.value;
     setProfile(profile);
     setCache(profileKey, profile);
@@ -290,7 +351,7 @@ async function loadPortfolio() {
   if (repositoriesResult.status === "fulfilled" && Array.isArray(repositoriesResult.value)) {
     const repositories = repositoriesResult.value;
     setCache(repositoriesKey, repositories);
-    setProjects(repositories, profileResult.status === "fulfilled" ? profileResult.value : cachedProfile);
+    setProjects(repositories, profileLoaded ? profileResult.value : cachedProfile);
   } else {
     const error = repositoriesResult.status === "rejected"
       ? repositoriesResult.reason
@@ -299,42 +360,52 @@ async function loadPortfolio() {
   }
 }
 
-function setMotionPaused(paused) {
+elements.profileRetry.addEventListener("click", loadPortfolio);
+elements.projectsRetry.addEventListener("click", loadPortfolio);
+
+function setMotionPaused(paused, disabledByPreference = false) {
   document.body.classList.toggle("motion-paused", paused);
   elements.motionToggle.setAttribute("aria-pressed", String(paused));
-  elements.motionToggle.querySelector("span").textContent = paused ? "Resume animation" : "Pause animation";
+  elements.motionToggle.disabled = disabledByPreference;
+  elements.motionToggle.querySelector("span").textContent = disabledByPreference
+    ? "Motion reduced by system"
+    : paused
+      ? "Resume animation"
+      : "Pause animation";
   elements.motionToggle.querySelector("svg").innerHTML = paused
     ? '<path d="m8 5 11 7-11 7z" />'
     : '<rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" />';
 }
 
-const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
-setMotionPaused(motionPreference.matches);
+const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+setMotionPaused(Boolean(motionPreference?.matches), Boolean(motionPreference?.matches));
 elements.motionToggle.addEventListener("click", () => {
   const paused = elements.motionToggle.getAttribute("aria-pressed") !== "true";
   setMotionPaused(paused);
 });
-motionPreference.addEventListener("change", (event) => setMotionPaused(event.matches));
+motionPreference?.addEventListener?.("change", (event) => setMotionPaused(event.matches, event.matches));
 
 loadPortfolio();
 
 const sections = [...document.querySelectorAll(".section-anchor")];
 const navLinks = [...document.querySelectorAll(".nav-link")];
-const observer = new IntersectionObserver(
-  (entries) => {
-    const visible = entries
-      .filter((entry) => entry.isIntersecting)
-      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (!visible) return;
+if ("IntersectionObserver" in window) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
 
-    navLinks.forEach((link) => {
-      const active = link.hash === `#${visible.target.id}`;
-      link.classList.toggle("is-active", active);
-      if (active) link.setAttribute("aria-current", "page");
-      else link.removeAttribute("aria-current");
-    });
-  },
-  { rootMargin: "-20% 0px -58% 0px", threshold: [0, 0.1, 0.3, 0.6] },
-);
+      navLinks.forEach((link) => {
+        const active = link.hash === `#${visible.target.id}`;
+        link.classList.toggle("is-active", active);
+        if (active) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+      });
+    },
+    { rootMargin: "-20% 0px -58% 0px", threshold: [0, 0.1, 0.3, 0.6] },
+  );
 
-sections.forEach((section) => observer.observe(section));
+  sections.forEach((section) => observer.observe(section));
+}
