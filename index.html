@@ -22,26 +22,28 @@
     <div class="page-glow page-glow-one" aria-hidden="true"></div>
     <div class="page-glow page-glow-two" aria-hidden="true"></div>
 
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
     <nav class="side-nav" aria-label="Main navigation">
       <a class="nav-mark" href="#home" aria-label="Back to home">s<span>.</span></a>
       <div class="nav-links">
         <a class="nav-link is-active" href="#home" aria-current="page">
-          <span class="nav-icon" aria-hidden="true">⌂</span><span>Home</span>
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" /></svg><span>Home</span>
         </a>
         <a class="nav-link" href="#projects">
-          <span class="nav-icon nav-project-icon" aria-hidden="true">▤</span><span>Projects</span>
+          <svg class="nav-icon nav-project-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4m-3-7-2 6" /></svg><span>Projects</span>
         </a>
         <a class="nav-link" href="#about">
-          <span class="nav-icon" aria-hidden="true">◎</span><span>About</span>
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0z" /></svg><span>About</span>
         </a>
         <a class="nav-link" href="#contact">
-          <span class="nav-icon nav-contact-icon" aria-hidden="true">↗</span><span>Contact</span>
+          <svg class="nav-icon nav-contact-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z" /></svg><span>Contact</span>
         </a>
       </div>
       <span class="nav-caption">PORTFOLIO&nbsp; · &nbsp;2026</span>
     </nav>
 
-    <main class="portfolio">
+    <main id="main-content" class="portfolio">
       <section class="hero section-anchor" id="home" aria-labelledby="hero-title">
         <div class="hero-scene" aria-hidden="true">
           <div class="scene-sky"></div>
@@ -82,35 +84,40 @@
           <p class="eyebrow"><span class="eyebrow-dot"></span> GITHUB PORTFOLIO <span class="eyebrow-divider">·</span> <span id="hero-handle">@ShivamGawade-XS</span></p>
           <h1 id="hero-title"><span id="hero-name">Shivam Gawade</span></h1>
           <p class="hero-copy" id="hero-bio">Tech enthusiast 💻🔥</p>
+          <p id="profile-status" class="profile-status" role="status" aria-live="polite"></p>
           <div class="hero-actions">
             <a class="button button-primary" id="hero-github" href="https://github.com/ShivamGawade-XS" target="_blank" rel="noreferrer">
-              <span class="github-mark" aria-hidden="true">◉</span> GitHub
+              <svg class="github-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.77-.24.77-.54v-2.1c-3.13.68-3.8-1.33-3.8-1.33-.51-1.3-1.25-1.64-1.25-1.64-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.61 1.22 3.25.93.1-.72.39-1.22.71-1.5-2.5-.28-5.13-1.25-5.13-5.56 0-1.23.44-2.23 1.16-3.01-.12-.28-.5-1.43.11-2.98 0 0 .95-.3 3.08 1.15a10.7 10.7 0 0 1 5.6 0c2.13-1.45 3.07-1.15 3.07-1.15.62 1.55.23 2.7.12 2.98.72.78 1.15 1.78 1.15 3.01 0 4.32-2.63 5.27-5.14 5.55.4.35.76 1.03.76 2.08v3.1c0 .3.2.65.78.54A11.2 11.2 0 0 0 12 .8Z" /></svg> GitHub
             </a>
           </div>
 
-          <div class="stats-panel" aria-label="GitHub profile statistics">
-            <div class="stat">
+          <div class="stats-panel" role="group" aria-label="GitHub profile statistics">
+            <div class="stat" aria-label="Public repositories">
               <span class="stat-value" id="stat-repos">—</span>
               <span class="stat-label">Repos</span>
             </div>
-            <div class="stat">
+            <div class="stat" aria-label="Stars across active repositories">
               <span class="stat-value" id="stat-stars">—</span>
               <span class="stat-label">Stars</span>
             </div>
-            <div class="stat">
+            <div class="stat" aria-label="GitHub followers">
               <span class="stat-value" id="stat-followers">—</span>
               <span class="stat-label">Followers</span>
             </div>
           </div>
-          <div id="language-chips" class="language-chips" aria-label="Top programming languages"></div>
+          <div id="language-chips" class="language-chips" role="group" aria-label="Most common languages across non-fork repositories"></div>
         </div>
-        <div class="avatar-frame">
-          <img id="avatar" src="" alt="" />
+        <div class="avatar-frame" role="img" aria-label="GitHub profile picture">
+          <img id="avatar" alt="" />
           <span id="avatar-fallback" class="avatar-fallback" aria-hidden="true">SG</span>
-          <span class="availability-dot" title="Open to new ideas"></span>
+          <span class="availability-dot" aria-hidden="true"></span>
         </div>
-        <div class="hero-credit">Original design by Sameera Wijerathna <span aria-hidden="true">↗</span></div>
+        <a class="hero-credit" href="https://sameerasw.com/" target="_blank" rel="noreferrer">Inspired by Sameera Wijerathna <span aria-hidden="true">↗</span></a>
         <a class="scroll-cue" href="#projects"><span aria-hidden="true">↓</span> SCROLL TO EXPLORE</a>
+        <button id="motion-toggle" class="motion-toggle" type="button" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg>
+          <span>Pause animation</span>
+        </button>
       </section>
 
       <section class="content-section section-anchor" id="projects" aria-labelledby="projects-title">
@@ -125,7 +132,7 @@
         </div>
         <p class="section-intro">A selection of recent experiments, ideas, and open-source work pulled straight from GitHub.</p>
         <div id="project-status" class="project-status" role="status" aria-live="polite">Loading projects from GitHub…</div>
-        <div id="project-list" class="project-list" aria-label="Selected GitHub projects"></div>
+        <div id="project-list" class="project-list" role="list" aria-label="Selected GitHub projects"></div>
         <a id="projects-more" class="button button-outline projects-more" href="https://github.com/ShivamGawade-XS?tab=repositories" target="_blank" rel="noreferrer">
           More on GitHub <span aria-hidden="true">↗</span>
         </a>
@@ -157,7 +164,7 @@
         <h2 id="contact-title">Have an idea?<br />Let's make it real<span class="title-period">.</span></h2>
         <p class="contact-copy">Good things happen when curious people build together. Find me on GitHub and let's get something started.</p>
         <a class="button button-primary contact-button" id="contact-link" href="https://github.com/ShivamGawade-XS" target="_blank" rel="noreferrer">
-          Say hello <span aria-hidden="true">↗</span>
+          Find me on GitHub <span aria-hidden="true">↗</span>
         </a>
       </section>
 
